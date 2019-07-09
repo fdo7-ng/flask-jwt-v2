@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>User: {{ user.username }}</h1>
+                {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+                {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
+    <hr>
+    
+<div id="tool_list">
+
+    <ul>
+    <li><a href="{{ url_for('vctools.vc_rpt_j2') }}" >Lab vCenter Reports J2</a></li>
+    <li><a href="{{ url_for('vctools.vc_rpt_j2_v2') }}" >Lab vCenter Reports - Creds</a></li>
+    <li><a href="{{ url_for('vctools.vc_console') }}" >Console Access</a></li>
+    <ul>
+</div> 
+{% endblock %}

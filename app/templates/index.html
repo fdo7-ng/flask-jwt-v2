@@ -1,6 +1,27 @@
-
+<!-- https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ii-templates
+-->
 {% extends "base.html" %}
-
 {% block content %}
-    <h1>Hi, {{ username }}!</h1>
+    <h1 class="title">VC - ToolBox v1.0 </h1>
+    <h2 class="subtitle">Hi,  {{ current_user.username}} !</h2>
 {% endblock %}
+
+
+<!-- HTML with no loop
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }} - MakiSite</title>
+        {% else %}
+        <title>Welcome to MakiSite</title>
+        {% endif %}
+    </head>
+    <body>
+        <h1>Hi, {{ user.username }}!</h1>
+        {% for post in posts %}
+        <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+        {% endfor %}
+    </body>
+</html>
+
+-->

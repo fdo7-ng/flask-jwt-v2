@@ -4,9 +4,9 @@
 ## Requirement 
 
 pip install flask flask-restful flask-jwt-extended passlib flask-sqlalchemy flask-migrate
-pip install python-env
+pip install python-env, requests
 pip install flask-login flask-wtf
-
+pip instlal pyvmomi, xmltodict, jmespath, jsonify
 
 ## Create VENV
 $ virtualenv -p python3 venv

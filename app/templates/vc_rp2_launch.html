@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <h1>Pull Virtual Machine Report</h1>
+    <p>This tool will generate a report of all virtual machines in selected vCenter</p>
+    <p>Note: Name and VMID enabled by default</p>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.vcenter.label }}<br>
+            {{ form.vcenter(size=32) }}<br>
+            {% for error in form.vcenter.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}<br>
+            {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <!-- http://jinja.pocoo.org/docs/2.10/templates/#batch-->
+        <div id="options">
+        <table>
+          {%- for group in options|batch(4, '') %}
+            <tr>
+            {%- for opt in group %}
+              <td>
+                  <input type="checkbox" id="id_{{opt}}" name="options" value="{{opt}}">
+                  <label for="id_{{opt}}">{{opt}}</label>
+              </td>
+            {%- endfor %}
+            </tr>
+          {%- endfor %}
+        </table>
+        </div>
+
+
+
+<!-- Manually Testing Checkbox
+        <input type="checkbox" name="opt1" value="test1"/><label>test1</label>
+        <input type="checkbox" name="opt1" value="test2"/><label>test2</label>
+-->
+        <p>{{ form.launch() }}</p>
+        <p>Please be patient. Duration will depend on amount of servers and optiosn selected...</p>
+    </form>
+{% endblock %}
