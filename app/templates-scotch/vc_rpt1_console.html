@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <h1>Virtual Machine Report generated for VC: {{ vcenter }}</h1>
+    <p>This tool will generate a report of all virtual machines in options selected</p>
+    <p>Console - Link will only be available for servers that are poweredOn</p>
+
+<!--
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.vcenter.label }}<br>
+            {{ form.vcenter(size=32) }}<br>
+            {% for error in form.vcenter.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.vmid.label }}<br>
+            {{ form.vmid(size=32) }}<br>
+            {% for error in form.vmid.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.launch() }}</p>
+    </form>
+        <select name="virtualmachine\_list">
+          {% for itm in data %}
+            <option value="{{ itm['name']}}" {% if value== default %} selected {% endif %}>{{itm['name']}} {{ itm['moId']}}</option>
+          {% endfor %}
+        </select>
+-->
+
+<!--    This works but manual --
+<table>
+   {% for itm in data %}
+   <tr>
+     <td>{{ itm['name'] }}</td>
+       <td>{{ itm['moId'] }}</td>
+       <td>{{ itm['guestFullName'] }}</td>
+       <td>{{ itm['instanceuuid'] }}</td>
+       <td>{{ itm['uuid'] }}</td>
+       <td>{{ itm['vmPath'] }}</td>
+       <td>{{ itm['numCpu'] }}</td>
+       <td>{{ itm['cpuReservation'] }}</td>
+       <td>{{ itm['memoryReservation'] }}</td>
+       <td>{{ itm['memorySizeGB'] }}</td>
+
+   </tr>
+   {% endfor %}
+   </table>
+-->
+
+
+
+
+    <table>
+       {% for itm in data %}
+            <tr>
+            {% for key, value in itm.items() %}
+                <td>{{value}}</td>
+            {% endfor %}
+
+            {% if itm['powerState'] == 'poweredOn' %}
+              <td><a href="/get_console/{{ vcenter }}/{{ itm['moId'] }}" target="_blank">Console</a></td>
+            {% else %}
+              <td>Console</td>
+            {% endif %}
+
+            </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock %}

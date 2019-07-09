@@ -1,4 +1,4 @@
-#!/Users/SBMaru/Documents/GitHub/flask-jwt-v2/venv/bin/python
+#!/Users/fernando.ng/Documents/GitHub/flask-jwt-v2/venv/bin/python
 
 import sys
 import getopt

@@ -1,4 +1,4 @@
-#!/Users/SBMaru/Documents/GitHub/flask-jwt-v2/venv/bin/python3.6
+#!/Users/fernando.ng/Documents/GitHub/flask-jwt-v2/venv/bin/python3.7
 # -*- coding: utf-8 -*-
 import re
 import sys

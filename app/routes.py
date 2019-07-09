@@ -20,7 +20,7 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template('index.html', title='Home', posts=posts)
+    return render_template('index.html', title='Home', posts=posts, )
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -29,10 +29,10 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        #user = UserModel.query.filter_by(username=form.username.data).first()
-        user = UserModel.find_by_username( form.username.data )
+        user = UserModel.query.filter_by(username=form.username.data).first()
+        #user = UserModel.find_by_username( form.username.data )
         print(user)
-        if user is None or not UserModel.check_password(form.password.data, user['password']):
+        if user is None or not UserModel.check_password(form.password.data, user.password):
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
@@ -40,7 +40,7 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Sign In', form=form, username=form.username.data)
 
 
 @app.route('/logout')

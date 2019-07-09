@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/SBMaru/Documents/GitHub/flask-jwt-v2/venv"
+VIRTUAL_ENV="/Users/fernando.ng/Documents/GitHub/flask-jwt-v2/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

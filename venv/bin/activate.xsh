@@ -25,7 +25,7 @@ def _deactivate(args):
 _deactivate(["nondestructive"])
 aliases["deactivate"] = _deactivate
 
-$VIRTUAL_ENV = r"/Users/SBMaru/Documents/GitHub/flask-jwt-v2/venv"
+$VIRTUAL_ENV = r"/Users/fernando.ng/Documents/GitHub/flask-jwt-v2/venv"
 
 $_OLD_VIRTUAL_PATH = $PATH
 $PATH = $PATH[:]

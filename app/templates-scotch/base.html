@@ -1,0 +1,43 @@
+<html>
+    <head>
+      <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='my.css') }}>
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+      {% if title %}
+      <title>{{ title }} - Console Site</title>
+      {% else %}
+      <title>Welcome to Console Launch Site</title>
+      {% endif %}
+    </head>
+    <body>
+
+      <div>
+          Site Menu:
+          <!--
+          <a href="/index">Home</a>
+          <a href="/launch">Launch</a>
+        -->
+          <a href="{{ url_for('index') }}">Home</a>
+
+          <!--
+          <a href="{{ url_for('vc_rpt_j2') }}">LabRptV1</a>
+          <a href="{{ url_for('vc_rpt_j2_v2') }}">LabRptV2</a>
+          <a href="{{ url_for('vc_console') }}">Console</a>
+
+
+          -->
+          
+      </div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>

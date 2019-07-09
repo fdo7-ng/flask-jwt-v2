@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <h1>Virtual Machine Report generated for VC: {{ vcenter }}</h1>
+    <p>This tool will generate a report of all virtual machines in options selected</p>
+    <p></p>
+
+<!--    This works but manual --
+<table>
+   {% for itm in data %}
+   <tr>
+     <td>{{ itm['name'] }}</td>
+       <td>{{ itm['moId'] }}</td>
+       <td>{{ itm['guestFullName'] }}</td>
+       <td>{{ itm['instanceuuid'] }}</td>
+       <td>{{ itm['uuid'] }}</td>
+       <td>{{ itm['vmPath'] }}</td>
+       <td>{{ itm['numCpu'] }}</td>
+       <td>{{ itm['cpuReservation'] }}</td>
+       <td>{{ itm['memoryReservation'] }}</td>
+       <td>{{ itm['memorySizeGB'] }}</td>
+
+   </tr>
+   {% endfor %}
+   </table>
+-->
+
+    <table>
+       {% for itm in data %}
+            <tr>
+            {% for key, value in itm.items() %}
+                <td>{{value}}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+
+
+
+{% endblock %}

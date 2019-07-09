@@ -4,7 +4,13 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
-class UserModel(db.Model):
+
+@login.user_loader
+def load_user(id):
+    return UserModel.query.get(int(id))
+
+
+class UserModel(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key = True)
@@ -28,6 +34,9 @@ class UserModel(db.Model):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+        
+    # def get_id(self):
+    #     return unicode(self.alternative_id)
 
     @classmethod
     def find_by_username(cls, username):
@@ -61,9 +70,6 @@ class UserModel(db.Model):
         return sha256.verify(password, hash)
 
 
-@login.user_loader
-def load_user(id):
-    return UserModel.query.get(int(id))
 
 
 class Post(db.Model):

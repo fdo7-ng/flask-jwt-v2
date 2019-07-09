@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+  <script type="text/javascript">// <![CDATA[
+        function preloader(){
+            document.getElementById("loading").style.display = "none";
+        }//preloader
+        window.onload = preloader;
+ // ]]></script>
+
+
+    <h1>Pull Virtual Machine Report</h1>
+    <p>This tool will generate a report of all virtual machines in selected vCenter</p>
+    <p>Note: Name and VMID enabled by default</p>
+
+    <div id="loading" style="display:none;"><img src= {{ url_for('static', filename = "Ellipsis-1.8s-200px.gif") }} alt="" />
+      <p>Script Running...</p>
+    </div>
+
+    <div id="wrapper">
+
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.vcenter.label }}<br>
+            {{ form.vcenter(size=32) }}<br>
+            {% for error in form.vcenter.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <!--   List all options unformated
+        {% for opt in options %}
+            <input type="checkbox" id="id_{{opt}}" name="options" value="{{opt}}">
+            <label for="id_{{opt}}">{{opt}}</label>
+        {% endfor %}
+        -->
+
+
+        <!-- http://jinja.pocoo.org/docs/2.10/templates/#batch-->
+        <div id="options">
+        <table>
+          {%- for group in options|batch(4, '') %}
+            <tr>
+            {%- for opt in group %}
+              <td>
+                  <input type="checkbox" id="id_{{opt}}" name="options" value="{{opt}}">
+                  <label for="id_{{opt}}">{{opt}}</label>
+              </td>
+            {%- endfor %}
+            </tr>
+          {%- endfor %}
+        </table>
+        </div>
+
+
+<!-- Manually Testing Checkbox
+        <input type="checkbox" name="opt1" value="test1"/><label>test1</label>
+        <input type="checkbox" name="opt1" value="test2"/><label>test2</label>
+
+
+                This is the original launch button
+                <p>{{ form.launch() }}</p>
+-->
+        <input class="submit" type="submit" name="btn_submit_info" value="Submit" onclick="$('#loading').show();$('#wrapper').hide();" >
+
+        </div>
+
+        <p>Please be patient. Duration will depend on amount of servers and options selected...</p>
+
+
+
+    </form>
+{% endblock %}

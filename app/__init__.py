@@ -29,6 +29,7 @@ db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
 login = LoginManager(app)
+login.init_app(app)
 login.login_view = 'login'
 
 # Initializes DB

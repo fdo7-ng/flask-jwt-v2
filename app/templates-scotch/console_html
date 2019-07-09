@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8">
+<!-- Use the .htaccess and remove these lines to avoid edge case issues.
+More info: h5bp.com/b/378 -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Console</title>
+<!-- Mobile viewport optimized: j.mp/bplateviewport -->
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- CSS: implied media=all -->
+<!-- CSS concatenated and minified via ant build script-->
+<link rel="stylesheet" href="../static/css/style.css">
+<link rel="stylesheet" href="../static/css/wmks-all.css">
+<!-- end CSS-->
+<!--link rel="shortcut icon" href="../static/img/favicon.ico" -->
+<link rel="shortcut icon" href="">
+<script type="text/javascript">
+if (!window.console) {
+   console = {log: function() {} };
+}
+</script>
+</head>
+<body>
+
+<!-- Page bar -->
+<div id="bar">
+   <div id="buttonBar">
+      <div class="buttonC">
+         <button id="keyboard" data-toggle="false"
+            data-alt="Don't Enforce US Keyboard Layout">
+            Enforce US Keyboard Layout
+         </button>
+		<button id="fullscreen">
+			View Fullscreen
+		</button>
+         <button id="cad">
+            Send Ctrl+Alt+Delete
+         </button>
+      </div>
+   </div>
+   <div id="vmName">
+      <span id="vmTitle">{{ server_name }}</span>
+   </div>
+</div>
+
+<!-- WMKS container -->
+<div id="container"></div>
+
+<!-- Spinner markup -->
+<div id="spinner">
+   <div class="bar1"></div>
+   <div class="bar2"></div>
+   <div class="bar3"></div>
+   <div class="bar4"></div>
+   <div class="bar5"></div>
+   <div class="bar6"></div>
+   <div class="bar7"></div>
+   <div class="bar8"></div>
+   <div class="bar9"></div>
+   <div class="bar10"></div>
+   <div class="bar11"></div>
+   <div class="bar12"></div>
+</div>
+
+<!-- JavaScript at the bottom for fast page loading -->
+<!-- script src="./lib/jquery-1.10.2.min.js"></script -->
+<!-- script src="./lib/jquery-ui-1.8.16.min.js"></script-->
+
+<!-- WMKS -->
+<!--script src="js/wmks.min.js"></script-->
+
+
+<script type="text/javascript" src="../static/lib/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="../static/lib/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../static/lib/wmks.min.js"></script>
+
+<script>
+$(function() {
+
+   function layout() {
+      var w = $(window).width();
+      var h = $(window).height();
+      if(!wmks.isFullScreen()) {
+         container.css({
+            top: bar.outerHeight() + "px"
+         });
+         container.width(w).height(h - bar.outerHeight());
+         wmks.updateScreen();
+      } else {
+         container.css({
+            top: 0,
+            left: 0
+         });
+         container.width(w).height(h);
+      }
+   }
+
+   function showMessage(message) {
+      container.html(message);
+      bar.slideDown("fast", layout);
+      spinner.hide();
+   }
+
+   function getKeyboardLayout() {
+      var locale = "en_US".
+            replace("-", "_");
+      switch (locale) {
+         case "de": case "de_DE":
+         return "de-DE";
+         case "de_CH":
+            return "de-CH";
+         case "ja": case "ja_JP":
+         return "ja-JP_106/109";
+         case "it": case "it_IT":
+         return "it-IT";
+         case "es": case "es_ES":
+         return "es-ES";
+         case "pt": case "pt_PT":
+         return "pt-PT";
+         case "fr": case "fr_FR":
+         return "fr-FR";
+         case "fr_CH":
+            return "fr-CH";
+         default:
+            return "en-US";
+      }
+   }
+
+   var bar = $("#bar");
+   var cad = $("#cad");
+   var container = $("#container");
+   var fullscreen = $("#fullscreen");
+   var keyboard = $("#keyboard");
+   var spinner = $("#spinner");
+
+   var wmks = WMKS.createWMKS("container", {
+      keyboardLayoutId: getKeyboardLayout()
+   });
+   wmks.register(WMKS.CONST.Events.CONNECTION_STATE_CHANGE, function(evt, data) {
+      switch (data.state) {
+         case WMKS.CONST.ConnectionState.CONNECTING:
+            console.log("The console is connecting");
+            bar.slideUp("slow", layout);
+            break;
+         case WMKS.CONST.ConnectionState.CONNECTED:
+            console.log("The console has been connected");
+            spinner.hide();
+            bar.slideDown("fast", layout);
+            break;
+         case WMKS.CONST.ConnectionState.DISCONNECTED:
+            console.log("The console has been disconnected");
+            showMessage("The console has been disconnected. Close this window and re-launch the console to reconnect.");
+            break;
+      }
+   });
+   wmks.register(WMKS.CONST.Events.ERROR, function(evt, data) {
+      console.log("Error: " + data.errorType);
+   });
+   wmks.register(WMKS.CONST.Events.REMOTE_SCREEN_SIZE_CHANGE, function(evt, data) {
+      layout();
+   });
+
+   cad.on("click", function() {
+      wmks.sendCAD();
+   });
+
+	if (wmks.canFullScreen()) {
+		fullscreen.on("click", function (evt) {
+			wmks.enterFullScreen();
+		});
+	} else {
+		fullscreen.hide();
+	}
+
+   keyboard.on("click", function (evt) {
+      var fixANSIEquivalentKeys = keyboard.data("toggle");
+      var label = keyboard.html();
+      wmks.setOption("fixANSIEquivalentKeys", !fixANSIEquivalentKeys);
+      keyboard.html(keyboard.data("alt"));
+      keyboard.data("toggle", !fixANSIEquivalentKeys);
+      keyboard.data("alt", label);
+   });
+
+
+   //listen for window events
+   $(window).on("resize", layout);
+
+   // if params are provided, no need to show chrome
+   if (location.search) {
+      var loc = document.location;
+      var path = loc.host + loc.pathname.replace(/\.html$/, "");
+      //wmks.connect("wss://" + path + "/authd?" +
+      //      "host=vm01cl0vc2fb1lag1sapdrlabash01.ashlab.ops" +
+      //      "&port=902" +
+      //      "&cfgFile=%2Fvmfs%2Fvolumes%2F5ad8e438-8fbae0c7-1b40-00351a3e0c82%2FActifio+Report+Manager%2FActifio+Report+Manager.vmx" +
+      //      "&thumbprint=AA:E5:2B:5A:AF:8F:39:4D:4C:3A:D5:29:98:F4:F7:A7:5F:31:36:8C" +
+      //      "&ticket=529b0dcc-7ecd-0d7e-7e19-7a605e2ef1f9");
+
+      layout();
+      spinner.show();
+   };
+   wmks.connect("{{ wss_connection_string }}");
+   layout();
+   spinner.show();
+
+
+});
+</script>
+</body>
+</html>
